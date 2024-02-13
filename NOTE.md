@@ -1,8 +1,8 @@
 # TODO
 
 - CRUD utils
-- CRUD contacts
-- CRUD socials
+- [DONE] CRUD contacts
+- [DONE] CRUD socials
 - CRUD stores
 - CRUD payments
 - CRUD couriers

@@ -5,6 +5,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ContactsModule } from './contacts/contacts.module';
+import { SocialsModule } from './socials/socials.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ContactsModule } from './contacts/contacts.module';
     UsersModule,
     CategoriesModule,
     ContactsModule,
+    SocialsModule,
   ],
   providers: [PrismaService],
 })
