@@ -22,6 +22,7 @@ model users{
   email String @unique
   phone String? @db.VarChar(16) @unique
   hashedPassword String
+  refreshToken String? @db.VarChar(500)
   status Boolean @default(true)
   role Role @default(USER)
   createdAt DateTime @default(now())

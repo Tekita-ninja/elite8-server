@@ -24,6 +24,12 @@ export class AuthController {
   signin(@Body() dto: LoginUserDto, @Req() req, @Res() res) {
     return this.authService.signin(dto, req, res);
   }
+
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  refreshToken(@Req() req, @Res() res) {
+    return this.authService.refreshToken(req, res);
+  }
   @Get('signout')
   signout(@Req() req, @Res() res) {
     return this.authService.signout(req, res);
