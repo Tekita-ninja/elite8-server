@@ -25,7 +25,36 @@ async function main() {
     ],
   });
 
-  console.log(users);
+  const categories = await prisma.categories.createMany({
+    data: [
+      {
+        name: 'HIJAB',
+        slug: 'hijab',
+        description: 'Hijab premium, nyaman, gaya elegan, bahan berkualitas.',
+        sortNumber: 1,
+      },
+      {
+        name: 'DRESS',
+        slug: 'dress',
+        description: 'Dress mewah yang dirancang untuk keanggunan Anda.',
+        sortNumber: 2,
+      },
+      {
+        name: 'ONE SET',
+        slug: 'one-set',
+        description: 'One set berkualitas: gaya unik, nyaman, elegan.',
+        sortNumber: 3,
+      },
+      {
+        name: 'BLOUSE & TUNIC',
+        slug: 'blouse-and-tunic',
+        description: 'Blouse dan tunik chic, nyaman, bahan premium.',
+        sortNumber: 4,
+      },
+    ],
+  });
+
+  console.log(users, categories);
 }
 
 main()

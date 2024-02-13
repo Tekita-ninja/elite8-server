@@ -41,15 +41,19 @@ export class CategoriesService {
     const skip = page && page > 0 ? (parseInt(page) - 1) * take : 0;
     const orderField = order_by || 'createdAt';
     const orderType = order_type || 'desc';
-    const data = await this.prisma.categories.findMany({
-      where: {
-        ...params,
-        name: {
-          contains: params?.name,
-        },
+    const where = {
+      ...params,
+      name: {
+        contains: params?.name,
       },
-      take: take,
-      skip: skip,
+      description: {
+        contains: params?.description,
+      },
+    };
+    const data = await this.prisma.categories.findMany({
+      where,
+      take,
+      skip,
       orderBy: [
         {
           [orderField]: orderType,
@@ -64,12 +68,13 @@ export class CategoriesService {
       },
     });
 
+    const count = await this.prisma.categories.count({ where });
+
     return {
-      take,
-      skip,
-      orderField,
-      orderType,
-      data,
+      current_page: parseInt(page),
+      last_page: Math.ceil(count / per_page),
+      total: count,
+      data: data,
     };
   }
 
