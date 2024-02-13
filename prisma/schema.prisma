@@ -16,28 +16,170 @@ enum Role {
   SUPER
 }
 
-model users{
-  id String @unique @id @default(uuid())
-  name String
-  email String @unique
-  phone String? @db.VarChar(16) @unique
+model users {
+  id             String   @id @unique @default(uuid())
+  name           String
+  email          String   @unique
+  phone          String?  @unique @db.VarChar(16)
   hashedPassword String
-  refreshToken String? @db.VarChar(500)
-  status Boolean @default(true)
-  role Role @default(USER)
+  refreshToken   String?  @db.VarChar(500)
+  status         Boolean  @default(true)
+  role           Role     @default(USER)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt()
+}
+
+model categories {
+  id          String   @id @unique @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String   @db.VarChar(500)
+  status      Boolean  @default(true)
+  sortNumber  Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt()
+
+  products products[]
+
+  @@index([slug])
+}
+
+model productimages {
+  id        String    @id @unique @default(uuid())
+  productId String?
+  path      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt()
+  product   products? @relation(fields: [productId], references: [id])
+}
+
+enum Discount {
+  PERCENT
+  NOMINAL
+}
+
+model discount {
+  id        String   @id @unique @default(uuid())
+  type      Discount @default(PERCENT)
+  amount    Int
+  productId String   @unique
+  product   products @relation(fields: [productId], references: [id])
+}
+
+model products {
+  id           String          @id @unique @default(uuid())
+  categoryId   String
+  name         String
+  slug         String          @unique
+  description  String          @db.Text()
+  status       Boolean         @default(true)
+  images       productimages[]
+  videos       String?
+  price        Float?
+  stock        Int?
+  hasVarian    Boolean
+  weight       Int?
+  freeShiping  Boolean         @default(false)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt()
+  categoriesId String?
+
+  varians    varian[]
+  categories categories? @relation(fields: [categoriesId], references: [id])
+  discount   discount?
+
+  @@index([slug, name, categoryId])
+}
+
+model varian {
+  id        String    @id @unique @default(uuid())
+  productId String
+  name      String
+  value     String
+  price     Float?
+  stock     Int?
+  hasChild  Boolean
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt()
+  product   products? @relation(fields: [productId], references: [id])
+}
+
+model subvarian {
+  id        String   @id @unique @default(uuid())
+  varianId  String
+  name      String
+  value     String
+  price     Float
+  stock     Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
 }
 
-model categories{
-  id String @unique @id @default(uuid())
-  name String @unique
-  slug String @unique
-  description String @db.VarChar(500)
-  status Boolean @default(true)
-  sortNumber Int?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
+model utils {
+  id           String   @id @unique @default(uuid())
+  appName      String?
+  logoSmall    String?
+  logoFull     String?
+  videoProfile String?
+  mainEmail    String?
+  mainWhatsApp String?
+  mainPhone    String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt()
+}
 
-  @@index([slug])
+enum Contact {
+  EMAIL
+  PHONE
+  WHATSAPP
+}
+
+model contacts {
+  id    String  @id @unique @default(uuid())
+  icon  String?
+  name  String
+  value String
+  type  Contact @default(EMAIL)
+}
+
+model socials {
+  id     String  @id @unique @default(uuid())
+  icon   String?
+  name   String
+  link   String
+  status Boolean @default(true)
+}
+
+model stores {
+  id     String  @id @unique @default(uuid())
+  icon   String?
+  name   String
+  link   String
+  status Boolean @default(true)
+}
+
+model payments {
+  id     String  @id @unique @default(uuid())
+  icon   String?
+  name   String
+  holder String
+  number String
+  status Boolean @default(true)
+}
+
+model couriers {
+  id     String  @id @unique @default(uuid())
+  icon   String?
+  name   String
+  value  String
+  status Boolean @default(true)
+}
+
+model hero {
+  id       String  @id @unique @default(uuid())
+  image    String
+  title    String?
+  subtitle String?
+  caption  String?
+  link     String?
 }
