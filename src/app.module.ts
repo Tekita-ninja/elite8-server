@@ -10,6 +10,7 @@ import { UploadsModule } from './uploads/uploads.module';
 import { ConfigModule } from '@nestjs/config';
 import { StoresModule } from './stores/stores.module';
 import { PaymentsModule } from './payments/payments.module';
+import { CouriersModule } from './couriers/couriers.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { PaymentsModule } from './payments/payments.module';
     UploadsModule,
     StoresModule,
     PaymentsModule,
+    CouriersModule,
   ],
   providers: [PrismaService],
 })

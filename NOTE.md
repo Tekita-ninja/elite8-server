@@ -5,8 +5,8 @@
 - [DONE] CRUD contacts
 - [DONE] CRUD socials
 - [DONE] CRUD stores
-- [] CRUD payments
-- [] CRUD couriers
+- [DONE] CRUD payments
+- [DONE] CRUD couriers
 - [] CRUD hero
 
 

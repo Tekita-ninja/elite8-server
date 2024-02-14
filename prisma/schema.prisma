@@ -171,7 +171,7 @@ model couriers {
   id     String  @id @unique @default(uuid())
   icon   String?
   name   String
-  value  String
+  value  String?
   status Boolean @default(true)
 }
 
