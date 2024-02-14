@@ -12,3 +12,13 @@
 
 - [DONE] CRUD categories
 - [] CRUD products
+
+
+## Membuat seed
+- utils
+- contacts
+- socials
+- stores
+- payments
+- couriers
+- hero
