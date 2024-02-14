@@ -12,6 +12,7 @@ import { StoresModule } from './stores/stores.module';
 import { PaymentsModule } from './payments/payments.module';
 import { CouriersModule } from './couriers/couriers.module';
 import { HerosModule } from './heros/heros.module';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { HerosModule } from './heros/heros.module';
     PaymentsModule,
     CouriersModule,
     HerosModule,
+    ProductsModule,
   ],
   providers: [PrismaService],
 })

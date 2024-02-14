@@ -11,14 +11,17 @@
 
 
 - [DONE] CRUD categories
-- [] CRUD products
+- [DOING] CRUD products
+  - CREATE
+  - GET SLUG
+  - GET ALL
 
 
 ## Membuat seed
 - utils
-- contacts
-- socials
-- stores
-- payments
-- couriers
-- hero
+- contacts OK
+- socials OK
+- stores OK
+- payments OK
+- couriers OK
+- hero OK

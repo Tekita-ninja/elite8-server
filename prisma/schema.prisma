@@ -67,41 +67,42 @@ model discount {
 }
 
 model products {
-  id           String          @id @unique @default(uuid())
-  categoryId   String
-  name         String
-  slug         String          @unique
-  description  String          @db.Text()
-  status       Boolean         @default(true)
-  images       productimages[]
-  videos       String?
-  price        Float?
-  stock        Int?
-  hasVarian    Boolean
-  weight       Int?
-  freeShiping  Boolean         @default(false)
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt()
-  categoriesId String?
+  id          String   @id @unique @default(uuid())
+  categoryId  String
+  name        String
+  slug        String   @unique
+  description String   @db.Text()
+  status      Boolean  @default(true)
+  videos      String?
+  price       Float?
+  stock       Int?
+  hasVarian   Boolean
+  weight      Int?
+  freeShiping Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt()
 
-  varians    varian[]
-  categories categories? @relation(fields: [categoriesId], references: [id])
-  discount   discount?
+  images   productimages[]
+  varians  varian[]
+  category categories?     @relation(fields: [categoryId], references: [id])
+  discount discount?
 
-  @@index([slug, name, categoryId])
+  @@index([slug, name])
 }
 
 model varian {
-  id        String    @id @unique @default(uuid())
+  id        String  @id @unique @default(uuid())
   productId String
   name      String
   value     String
   price     Float?
   stock     Int?
   hasChild  Boolean
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt()
-  product   products? @relation(fields: [productId], references: [id])
+
+  subvarian subvarian[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt()
+  product   products?   @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model subvarian {
@@ -113,6 +114,7 @@ model subvarian {
   stock     Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
+  varian    varian   @relation(fields: [varianId], references: [id], onDelete: Cascade)
 }
 
 model utils {

@@ -53,8 +53,102 @@ async function main() {
       },
     ],
   });
+  const contacts = await prisma.contacts.createMany({
+    data: [
+      {
+        name: 'Telepon',
+        icon: 'contacts/phone.png',
+        value: '089688889999',
+        type: 'PHONE',
+      },
+      {
+        name: 'Whatsapp',
+        icon: 'contacts/wa.png',
+        value: '089600009999',
+        type: 'WHATSAPP',
+      },
+      {
+        name: 'Email',
+        icon: 'contacts/email.png',
+        value: 'admin@koselani.com',
+        type: 'EMAIL',
+      },
+    ],
+  });
+  const socials = await prisma.socials.createMany({
+    data: [
+      {
+        name: 'Facebook',
+        icon: 'socials/facebook.png',
+        link: 'https://facebook.com',
+        status: true,
+      },
+      {
+        name: 'Instagram',
+        icon: 'socials/instagram.png',
+        link: 'https://instagram.com/_uutbudiarto',
+        status: true,
+      },
+      {
+        name: 'Youtube',
+        icon: 'socials/youtube.png',
+        link: 'https://youtube.com',
+        status: true,
+      },
+    ],
+  });
+  const stores = await prisma.stores.createMany({
+    data: [
+      {
+        name: 'Shopee',
+        icon: 'stores/shopee.png',
+        link: 'https://shopee.com',
+        status: true,
+      },
+      {
+        name: 'Tiktok',
+        icon: 'stores/tiktok.png',
+        link: 'https://tiktok.com',
+        status: true,
+      },
+    ],
+  });
+  const payments = await prisma.payments.createMany({
+    data: [
+      {
+        name: 'BCA',
+        icon: 'payments/bca.png',
+        holder: 'Jhon Paul',
+        number: '000111222',
+        status: true,
+      },
+      {
+        name: 'MANDIRI',
+        icon: 'payments/mandiri.png',
+        holder: 'Jhon Paul',
+        number: '000011112222',
+        status: true,
+      },
+    ],
+  });
+  const couriers = await prisma.couriers.createMany({
+    data: [
+      {
+        name: 'JNE',
+        icon: 'couriers/jne.png',
+        value: 'jne',
+        status: true,
+      },
+      {
+        name: 'JNT',
+        icon: 'couriers/jnt.png',
+        value: 'jnt',
+        status: true,
+      },
+    ],
+  });
 
-  console.log(users, categories);
+  console.log(users, categories, contacts, socials, stores, payments, couriers);
 }
 
 main()
