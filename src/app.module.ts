@@ -11,6 +11,7 @@ import { ConfigModule } from '@nestjs/config';
 import { StoresModule } from './stores/stores.module';
 import { PaymentsModule } from './payments/payments.module';
 import { CouriersModule } from './couriers/couriers.module';
+import { HerosModule } from './heros/heros.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { CouriersModule } from './couriers/couriers.module';
     StoresModule,
     PaymentsModule,
     CouriersModule,
+    HerosModule,
   ],
   providers: [PrismaService],
 })

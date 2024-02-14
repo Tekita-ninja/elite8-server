@@ -7,7 +7,7 @@
 - [DONE] CRUD stores
 - [DONE] CRUD payments
 - [DONE] CRUD couriers
-- [] CRUD hero
+- [DONE] CRUD heros
 
 
 - [DONE] CRUD categories
