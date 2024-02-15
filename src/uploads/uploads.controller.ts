@@ -3,15 +3,18 @@ import {
   ParseFilePipe,
   Post,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadsService } from './uploads.service';
+import { JwtAuthGuard } from 'src/auth/jwt.guard';
 
 @Controller('upload')
 export class UploadsController {
   constructor(private readonly uploadService: UploadsService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post('image')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(

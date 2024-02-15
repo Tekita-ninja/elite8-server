@@ -1,20 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { createUniqueSlug } from 'src/utils/slug';
 import {
   CreateProductDto,
   SubVarianDto,
   VarianDto,
 } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { createSlug } from 'src/utils/slug';
 
 @Injectable()
 export class ProductsService {
   constructor(private prisma: PrismaService) {}
-  create(createProductDto: CreateProductDto) {
+  async create(createProductDto: CreateProductDto) {
+    // CEK IS CATEGORY ADA
+    const ctg = await this.prisma.categories.findUnique({
+      where: { id: createProductDto.categoryId },
+    });
+
+    if (!ctg) {
+      throw new NotFoundException(
+        `ID Category ${createProductDto.categoryId} Not Found`,
+      );
+    }
+
     const isProductHasVarian =
       createProductDto.varians && createProductDto.varians.length > 0;
-    const productSlug = createSlug(createProductDto.name);
+    const productSlug = createUniqueSlug(createProductDto.name);
+
     let productInput;
     if (isProductHasVarian) {
       const isHasSubVarian = !!createProductDto.varians[0].subvarian;
@@ -94,13 +106,31 @@ export class ProductsService {
     });
   }
 
-  findAll() {
-    return this.prisma.products.findMany({
+  async findPaginate(query: any) {
+    const { page, per_page, order_by, order_type, ...params } = query;
+    const take = per_page ? parseInt(per_page) : 10;
+    const skip = page && page > 0 ? (parseInt(page) - 1) * take : 0;
+    const orderField = order_by || 'createdAt';
+    const orderType = order_type || 'desc';
+    const where = {
+      ...params,
+      name: {
+        contains: params?.name,
+      },
+    };
+    const data = await this.prisma.products.findMany({
+      where,
+      take,
+      skip,
+      orderBy: [
+        {
+          [orderField]: orderType,
+        },
+      ],
       select: {
         id: true,
         name: true,
         slug: true,
-        description: true,
         status: true,
         videos: true,
         price: true,
@@ -116,10 +146,18 @@ export class ProductsService {
         },
       },
     });
+
+    const count = await this.prisma.products.count({ where });
+    return {
+      current_page: parseInt(page) | 1,
+      last_page: Math.ceil(count / take),
+      total: count,
+      data: data,
+    };
   }
 
-  findOne(slug: string) {
-    return this.prisma.products.findUnique({
+  async findOne(slug: string) {
+    const data = await this.prisma.products.findUnique({
       where: {
         slug,
       },
@@ -160,20 +198,33 @@ export class ProductsService {
         },
       },
     });
+    if (!data) {
+      throw new NotFoundException(`Slug ${slug} Not Found`);
+    }
+    return data;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
+  async update(id: string, updateProductDto: UpdateProductDto) {
     return {
+      messgage: 'Fitur belum jalan',
       id,
-      updateProductDto,
+      data: updateProductDto,
     };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: string) {
+    await this.findById(id);
+    return this.prisma.products.delete({ where: { id } });
   }
-
-  async saveProduct(data) {
+  async findById(id: string) {
+    const data = await this.prisma.products.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!data) {
+      throw new NotFoundException(`ID ${id} Not Found`);
+    }
     return data;
   }
 }

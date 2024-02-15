@@ -71,8 +71,8 @@ export class CategoriesService {
     const count = await this.prisma.categories.count({ where });
 
     return {
-      current_page: parseInt(page),
-      last_page: Math.ceil(count / per_page),
+      current_page: parseInt(page) || 0,
+      last_page: Math.ceil(count / take),
       total: count,
       data: data,
     };
