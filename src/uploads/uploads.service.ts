@@ -28,6 +28,7 @@ export class UploadsService {
       return {
         status: response.$metadata.httpStatusCode,
         message: 'success upload file',
+        filename: fileName,
       };
     } catch (error) {
       throw new BadRequestException('failed upload file');

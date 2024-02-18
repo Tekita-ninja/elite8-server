@@ -104,7 +104,7 @@ export class CategoriesService {
   async findLastNumber() {
     const response = await this.prisma.categories.findFirst({
       orderBy: {
-        id: 'desc',
+        sortNumber: 'desc',
       },
       select: {
         id: true,
