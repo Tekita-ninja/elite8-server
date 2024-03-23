@@ -35,6 +35,25 @@ export class UploadsService {
     }
   }
 
+  async uploads(files: Array<Express.Multer.File>) {
+    try {
+      const responses = Promise.all(
+        files.map((file: Express.Multer.File) => {
+          return this.s3Client.send(
+            new PutObjectCommand({
+              Bucket: 'koselani',
+              Key: file.filename,
+              Body: file.buffer,
+            }),
+          );
+        }),
+      );
+      return (await responses).length;
+    } catch (error) {
+      return error;
+    }
+  }
+
   async get(fileName: string) {
     const response = await this.s3Client.send(
       new GetObjectAclCommand({
