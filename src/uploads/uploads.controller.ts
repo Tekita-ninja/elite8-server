@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
-import { customFileName } from 'src/utils/files';
+import { customFileName, toFullPath } from 'src/utils/files';
 import { UploadsService } from './uploads.service';
 @Controller('upload')
 export class UploadsController {
@@ -48,10 +48,10 @@ export class UploadsController {
     if (response && response > 0) {
       const images = newFiles.map((item: Express.Multer.File) => {
         return {
-          path: item.filename,
+          filename: item.filename,
+          path: toFullPath(item.filename),
         };
       });
-
       return images;
     }
   }
