@@ -148,17 +148,15 @@ async function main() {
     ],
   });
   const utils = await prisma.utils.create({
-    data: [
-      {
-        appName: 'Koselani Premium',
-        logoSmall: 'logo-small.png',
-        logoFull: 'logo-full.png',
-        videoProfile: 'video.png',
-        mainEmail: 'admin@koselanipermium.com',
-        mainWhatsApp: '082278789999',
-        mainPhone: '082278789999',
-      },
-    ],
+    data: {
+      appName: 'Koselani Premium',
+      logoSmall: 'logo-small.png',
+      logoFull: 'logo-full.png',
+      videoProfile: 'video.png',
+      mainEmail: 'admin@koselanipermium.com',
+      mainWhatsApp: '082278789999',
+      mainPhone: '082278789999',
+    },
   });
 
   console.log(
