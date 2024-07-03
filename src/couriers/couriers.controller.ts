@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { CouriersService } from './couriers.service';
 import { CreateCourierDto } from './dto/create-courier.dto';
@@ -23,9 +24,14 @@ export class CouriersController {
     return this.couriersService.create(createCourierDto);
   }
 
-  @Get()
+  @Get('all')
   findAll() {
     return this.couriersService.findAll();
+  }
+
+  @Get()
+  findPaginate(@Query() query: any) {
+    return this.couriersService.findPaginate(query);
   }
 
   @Get(':id')

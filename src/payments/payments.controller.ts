@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
@@ -23,9 +24,13 @@ export class PaymentsController {
     return this.paymentsService.create(createPaymentDto);
   }
 
-  @Get()
+  @Get('all')
   findAll() {
     return this.paymentsService.findAll();
+  }
+  @Get()
+  findPaginate(@Query() query: any) {
+    return this.paymentsService.findPaginate(query);
   }
 
   @Get(':id')

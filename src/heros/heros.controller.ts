@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { HerosService } from './heros.service';
 import { CreateHeroDto } from './dto/create-hero.dto';
@@ -23,9 +24,14 @@ export class HerosController {
     return this.herosService.create(createHeroDto);
   }
 
-  @Get()
+  @Get('all')
   findAll() {
     return this.herosService.findAll();
+  }
+
+  @Get()
+  findPaginate(@Query() query: any) {
+    return this.herosService.findPaginate(query);
   }
 
   @Get(':id')

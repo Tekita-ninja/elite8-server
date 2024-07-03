@@ -137,51 +137,63 @@ enum Contact {
 }
 
 model contacts {
-  id    String  @id @unique @default(uuid())
-  icon  String?
-  name  String
-  value String
-  type  Contact @default(EMAIL)
+  id        String   @id @unique @default(uuid())
+  icon      String?
+  name      String
+  value     String
+  type      Contact  @default(EMAIL)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
 }
 
 model socials {
-  id     String  @id @unique @default(uuid())
-  icon   String?
-  name   String
-  link   String
-  status Boolean @default(true)
+  id        String   @id @unique @default(uuid())
+  icon      String?
+  name      String
+  link      String
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
 }
 
 model stores {
-  id     String  @id @unique @default(uuid())
-  icon   String?
-  name   String
-  link   String
-  status Boolean @default(true)
+  id        String   @id @unique @default(uuid())
+  icon      String?
+  name      String
+  link      String
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
 }
 
 model payments {
-  id     String  @id @unique @default(uuid())
-  icon   String?
-  name   String
-  holder String
-  number String
-  status Boolean @default(true)
+  id        String   @id @unique @default(uuid())
+  icon      String?
+  name      String
+  holder    String
+  number    String
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
 }
 
 model couriers {
-  id     String  @id @unique @default(uuid())
-  icon   String?
-  name   String
-  value  String?
-  status Boolean @default(true)
+  id        String   @id @unique @default(uuid())
+  icon      String?
+  name      String
+  value     String?
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
 }
 
 model hero {
-  id       String  @id @unique @default(uuid())
-  image    String
-  title    String?
-  subtitle String?
-  caption  String?
-  link     String?
+  id        String   @id @unique @default(uuid())
+  image     String
+  title     String?
+  subtitle  String?
+  caption   String?
+  link      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
 }

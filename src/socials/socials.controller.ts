@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { SocialsService } from './socials.service';
 import { CreateSocialDto } from './dto/create-social.dto';
@@ -23,9 +24,14 @@ export class SocialsController {
     return this.socialsService.create(createSocialDto);
   }
 
-  @Get()
+  @Get('all')
   findAll() {
     return this.socialsService.findAll();
+  }
+
+  @Get()
+  findPaginate(@Query() query: any) {
+    return this.socialsService.findPaginate(query);
   }
 
   @Get(':id')

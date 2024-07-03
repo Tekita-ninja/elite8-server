@@ -22,14 +22,15 @@ export class CategoriesController {
   create(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoriesService.create(createCategoryDto);
   }
-  @Get()
-  findPaginate(@Query() query: any) {
-    return this.categoriesService.findPaginate(query);
-  }
 
   @Get('all')
   findAll() {
     return this.categoriesService.findAll();
+  }
+
+  @Get()
+  findPaginate(@Query() query: any) {
+    return this.categoriesService.findPaginate(query);
   }
 
   @Get(':id')

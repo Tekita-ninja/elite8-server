@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { StoresService } from './stores.service';
 import { CreateStoreDto } from './dto/create-store.dto';
@@ -23,9 +24,14 @@ export class StoresController {
     return this.storesService.create(createStoreDto);
   }
 
-  @Get()
+  @Get('all')
   findAll() {
     return this.storesService.findAll();
+  }
+
+  @Get()
+  findPaginate(@Query() query: any) {
+    return this.storesService.findPaginate(query);
   }
 
   @Get(':id')

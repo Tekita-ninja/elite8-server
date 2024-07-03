@@ -107,11 +107,11 @@ export class ProductsService {
   }
 
   async findPaginate(query: any) {
-    const { page, per_page, order_by, order_type, ...params } = query;
+    const { page, per_page, sortBy, sortType, ...params } = query;
     const take = per_page ? parseInt(per_page) : 10;
     const skip = page && page > 0 ? (parseInt(page) - 1) * take : 0;
-    const orderField = order_by || 'createdAt';
-    const orderType = order_type || 'desc';
+    const orderField = sortBy || 'createdAt';
+    const orderType = sortType || 'desc';
     const where = {
       ...params,
       name: {
@@ -149,9 +149,11 @@ export class ProductsService {
 
     const count = await this.prisma.products.count({ where });
     return {
-      current_page: parseInt(page) | 1,
-      last_page: Math.ceil(count / take),
-      total: count,
+      meta: {
+        current_page: parseInt(page) | 1,
+        last_page: Math.ceil(count / take),
+        total: count,
+      },
       data: data,
     };
   }

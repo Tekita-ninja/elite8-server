@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateHeroDto {
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   public image: string;
 
