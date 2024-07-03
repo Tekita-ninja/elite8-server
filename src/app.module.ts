@@ -13,6 +13,7 @@ import { PaymentsModule } from './payments/payments.module';
 import { CouriersModule } from './couriers/couriers.module';
 import { HerosModule } from './heros/heros.module';
 import { ProductsModule } from './products/products.module';
+import { WebUtilsModule } from './web_utils/web_utils.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { ProductsModule } from './products/products.module';
     CouriersModule,
     HerosModule,
     ProductsModule,
+    WebUtilsModule,
   ],
   providers: [PrismaService],
 })
