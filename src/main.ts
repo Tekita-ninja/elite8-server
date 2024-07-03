@@ -7,9 +7,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.enableCors({
-    origin: ['http://localhost:3000'],
+    origin: [
+      'http://localhost:3000',
+      'https://koselanipremium.com',
+      'https://admin.koselanipremium.com',
+    ],
   });
   app.use(cookieParser());
-  await app.listen(4000);
+  await app.listen(8000);
 }
 bootstrap();
