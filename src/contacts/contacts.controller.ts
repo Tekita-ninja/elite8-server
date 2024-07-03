@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ContactsService } from './contacts.service';
 import {
@@ -31,9 +32,13 @@ export class ContactsController {
     return this.contactsService.create(createContactDto);
   }
 
-  @Get()
+  @Get('all')
   findAll() {
     return this.contactsService.findAll();
+  }
+  @Get()
+  findPaginate(@Query() query: any) {
+    return this.contactsService.findPaginate(query);
   }
 
   @Get(':id')
