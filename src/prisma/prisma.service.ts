@@ -10,7 +10,7 @@ export class PrismaService
     super({
       datasources: {
         db: {
-          url: 'mysql://root:470127@Umj@localhost:3306/sereniti_premimum',
+          url: process.env.DATABASE_URL,
         },
       },
     });
