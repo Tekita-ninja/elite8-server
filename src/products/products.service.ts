@@ -139,7 +139,17 @@ export class ProductsService {
         weight: true,
         freeShiping: true,
         category: true,
-        varians: true,
+        varians: {
+          select: {
+            id: true,
+            name: true,
+            value: true,
+            price: true,
+            stock: true,
+            hasChild: true,
+            subvarian: true,
+          },
+        },
         images: {
           select: {
             id: true,
