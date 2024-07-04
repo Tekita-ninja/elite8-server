@@ -107,8 +107,8 @@ export class ProductsService {
   }
 
   async findPaginate(query: any) {
-    const { page, per_page, sortBy, sortType, ...params } = query;
-    const take = per_page ? parseInt(per_page) : 10;
+    const { page, rowsPerPage, sortBy, sortType, ...params } = query;
+    const take = rowsPerPage ? parseInt(rowsPerPage) : 10;
     const skip = page && page > 0 ? (parseInt(page) - 1) * take : 0;
     const orderField = sortBy || 'createdAt';
     const orderType = sortType || 'desc';
