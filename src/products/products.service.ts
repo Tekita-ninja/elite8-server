@@ -169,7 +169,6 @@ export class ProductsService {
       data: data,
     };
   }
-
   async findOne(slug: string) {
     const data = await this.prisma.products.findUnique({
       where: {
@@ -214,6 +213,54 @@ export class ProductsService {
     });
     if (!data) {
       throw new NotFoundException(`Slug ${slug} Not Found`);
+    }
+    return data;
+  }
+
+  async findDetailById(id: string) {
+    const data = await this.prisma.products.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        description: true,
+        status: true,
+        videos: true,
+        price: true,
+        stock: true,
+        hasVarian: true,
+        weight: true,
+        freeShiping: true,
+        images: {
+          select: {
+            id: true,
+            path: true,
+          },
+        },
+        varians: {
+          select: {
+            name: true,
+            value: true,
+            price: true,
+            stock: true,
+            hasChild: true,
+            subvarian: {
+              select: {
+                name: true,
+                value: true,
+                price: true,
+                stock: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    if (!data) {
+      throw new NotFoundException(`ID ${id} Not Found`);
     }
     return data;
   }
