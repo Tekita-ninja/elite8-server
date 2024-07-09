@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  Put,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -38,6 +39,10 @@ export class ProductsController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productsService.update(id, updateProductDto);
+  }
+  @Put(':id')
+  changeStatus(@Param('id') id: string, @Body() data: { status: boolean }) {
+    return this.productsService.changeStatus(id, data);
   }
 
   @Delete(':id')
