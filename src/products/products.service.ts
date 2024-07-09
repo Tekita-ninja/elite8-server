@@ -397,7 +397,16 @@ export class ProductsService {
     }
     return responseUpdate;
   }
-
+  async changeStatus(id: string, data: { status: boolean }) {
+    const product = await this.findById(id);
+    if (!product) {
+      throw new NotFoundException(`ID Product ${id} Not Found`);
+    }
+    return this.prisma.products.update({
+      where: { id },
+      data: data,
+    });
+  }
   async remove(id: string) {
     await this.findById(id);
     return this.prisma.products.delete({ where: { id } });
