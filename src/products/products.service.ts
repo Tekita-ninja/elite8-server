@@ -138,6 +138,8 @@ export class ProductsService {
         weight: true,
         freeShiping: true,
         category: true,
+        isPromo: true,
+        percentDiscount: true,
         varians: {
           select: {
             id: true,
@@ -185,6 +187,8 @@ export class ProductsService {
         hasVarian: true,
         weight: true,
         freeShiping: true,
+        isPromo: true,
+        percentDiscount: true,
         images: {
           select: {
             id: true,
@@ -234,6 +238,8 @@ export class ProductsService {
         weight: true,
         freeShiping: true,
         category: true,
+        isPromo: true,
+        percentDiscount: true,
         images: {
           select: {
             id: true,

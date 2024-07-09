@@ -67,20 +67,22 @@ model discount {
 }
 
 model products {
-  id          String   @id @unique @default(uuid())
-  categoryId  String
-  name        String
-  slug        String   @unique
-  description String   @db.Text()
-  status      Boolean  @default(true)
-  videos      String?
-  price       Float?
-  stock       Int?
-  hasVarian   Boolean
-  weight      Int?
-  freeShiping Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt()
+  id              String   @id @unique @default(uuid())
+  categoryId      String
+  name            String
+  slug            String   @unique
+  description     String   @db.Text()
+  status          Boolean  @default(true)
+  videos          String?
+  price           Float?
+  stock           Int?
+  hasVarian       Boolean
+  weight          Int?
+  freeShiping     Boolean  @default(false)
+  isPromo         Boolean? @default(false)
+  percentDiscount Int?     @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt()
 
   images   productimages[]
   varians  varian[]
