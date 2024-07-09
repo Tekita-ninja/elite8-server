@@ -12,7 +12,6 @@ import { UpdateProductDto } from './dto/update-product.dto';
 export class ProductsService {
   constructor(private prisma: PrismaService) {}
   async create(createProductDto: CreateProductDto) {
-    // CEK IS CATEGORY ADA
     const ctg = await this.prisma.categories.findUnique({
       where: { id: createProductDto.categoryId },
     });
@@ -243,6 +242,8 @@ export class ProductsService {
         },
         varians: {
           select: {
+            id: true,
+            productId: true,
             name: true,
             value: true,
             price: true,
@@ -250,6 +251,8 @@ export class ProductsService {
             hasChild: true,
             subvarian: {
               select: {
+                id: true,
+                varianId: true,
                 name: true,
                 value: true,
                 price: true,
@@ -267,11 +270,132 @@ export class ProductsService {
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {
-    return {
-      messgage: 'Fitur belum jalan',
-      id,
-      data: updateProductDto,
-    };
+    const ctg = await this.prisma.categories.findUnique({
+      where: { id: updateProductDto.categoryId },
+    });
+    if (!ctg) {
+      throw new NotFoundException(
+        `ID Category ${updateProductDto.categoryId} Not Found`,
+      );
+    }
+
+    const oldData = await this.findDetailById(id);
+    const oldImages = oldData.images.map((i) => i.id);
+    const oldVariantIds = [];
+    const oldSubVariantIds = [];
+    oldData.varians.forEach((v) => {
+      oldVariantIds.push(v.id);
+      v.subvarian.forEach((sv) => {
+        oldSubVariantIds.push(sv.id);
+      });
+    });
+    const isProductHasVarian =
+      updateProductDto.varians && updateProductDto.varians.length > 0;
+    const productSlug = createUniqueSlug(updateProductDto.name);
+
+    let productInput;
+    if (isProductHasVarian) {
+      const isHasSubVarian = !!updateProductDto.varians[0].subvarian;
+      if (isHasSubVarian) {
+        productInput = {
+          categoryId: updateProductDto.categoryId,
+          name: updateProductDto.name,
+          slug: productSlug,
+          description: updateProductDto.description,
+          videos: updateProductDto.videos,
+          price: updateProductDto.price,
+          stock: updateProductDto.stock,
+          weight: updateProductDto.weight,
+          status: updateProductDto.status,
+          hasVarian: isProductHasVarian ? true : false,
+          images: {
+            create: updateProductDto.images,
+          },
+          varians: {
+            create: updateProductDto.varians.map((item: VarianDto) => {
+              return {
+                hasChild: true,
+                ...item,
+                subvarian: {
+                  create: item.subvarian.map((item: SubVarianDto) => {
+                    return item;
+                  }),
+                },
+              };
+            }),
+          },
+        };
+      } else {
+        productInput = {
+          categoryId: updateProductDto.categoryId,
+          name: updateProductDto.name,
+          slug: productSlug,
+          description: updateProductDto.description,
+          videos: updateProductDto.videos,
+          price: updateProductDto.price,
+          stock: updateProductDto.stock,
+          weight: updateProductDto.weight,
+          status: updateProductDto.status,
+          hasVarian: isProductHasVarian ? true : false,
+          images: {
+            create: updateProductDto.images,
+          },
+          varians: {
+            create: updateProductDto.varians.map((item: VarianDto) => {
+              return {
+                hasChild: false,
+                ...item,
+              };
+            }),
+          },
+        };
+      }
+    } else {
+      productInput = {
+        categoryId: updateProductDto.categoryId,
+        name: updateProductDto.name,
+        slug: productSlug,
+        description: updateProductDto.description,
+        videos: updateProductDto.videos,
+        price: updateProductDto.price,
+        stock: updateProductDto.stock,
+        weight: updateProductDto.weight,
+        status: updateProductDto.status,
+        hasVarian: isProductHasVarian ? true : false,
+        images: {
+          create: updateProductDto.images,
+        },
+      };
+    }
+
+    const responseUpdate = await this.prisma.products.update({
+      where: { id },
+      data: productInput,
+    });
+    if (responseUpdate) {
+      await this.prisma.productimages.deleteMany({
+        where: {
+          id: {
+            in: oldImages,
+          },
+        },
+      });
+      await this.prisma.subvarian.deleteMany({
+        where: {
+          id: {
+            in: oldSubVariantIds,
+          },
+        },
+      });
+      await this.prisma.varian.deleteMany({
+        where: {
+          id: {
+            in: oldVariantIds,
+          },
+        },
+      });
+    }
+    return responseUpdate;
   }
 
   async remove(id: string) {
