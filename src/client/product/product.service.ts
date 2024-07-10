@@ -104,6 +104,9 @@ export class ProductService {
         freeShiping: true,
         isPromo: true,
         percentDiscount: true,
+        tiktokUrl: true,
+        tokopediaUrl: true,
+        shopeeUrl: true,
         images: {
           select: {
             id: true,

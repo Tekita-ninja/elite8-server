@@ -140,6 +140,9 @@ export class ProductsService {
         category: true,
         isPromo: true,
         percentDiscount: true,
+        tiktokUrl: true,
+        tokopediaUrl: true,
+        shopeeUrl: true,
         varians: {
           select: {
             id: true,
@@ -189,6 +192,9 @@ export class ProductsService {
         freeShiping: true,
         isPromo: true,
         percentDiscount: true,
+        tiktokUrl: true,
+        tokopediaUrl: true,
+        shopeeUrl: true,
         images: {
           select: {
             id: true,
@@ -240,6 +246,9 @@ export class ProductsService {
         category: true,
         isPromo: true,
         percentDiscount: true,
+        tiktokUrl: true,
+        tokopediaUrl: true,
+        shopeeUrl: true,
         images: {
           select: {
             id: true,
