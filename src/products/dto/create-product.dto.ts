@@ -108,6 +108,22 @@ export class CreateProductDto {
   @IsOptional()
   public freeShiping: boolean;
 
+  @IsBoolean()
+  @IsOptional()
+  public isPromo: boolean;
+
+  @IsString()
+  @IsOptional()
+  public tiktokUrl: string;
+
+  @IsString()
+  @IsOptional()
+  public shopeeUrl: string;
+
+  @IsString()
+  @IsOptional()
+  public tokopediaUrl: string;
+
   @ValidateNested({ each: true })
   @Type(() => VarianDto)
   @IsOptional()

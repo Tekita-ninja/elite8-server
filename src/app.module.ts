@@ -15,6 +15,7 @@ import { HerosModule } from './heros/heros.module';
 import { ProductsModule } from './products/products.module';
 import { WebUtilsModule } from './web_utils/web_utils.module';
 import { ProductModule } from './client/product/product.module';
+import { MessageTemplateModule } from './message_template/message_template.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ProductModule } from './client/product/product.module';
     ProductsModule,
     WebUtilsModule,
     ProductModule,
+    MessageTemplateModule,
   ],
   providers: [PrismaService],
 })

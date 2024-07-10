@@ -26,5 +26,13 @@ export class CreateWebUtilDto {
 
   @IsString()
   @IsOptional()
+  public midtransPublicKey: string;
+
+  @IsString()
+  @IsOptional()
+  public mainAddress: string;
+
+  @IsString()
+  @IsOptional()
   public mainPhone: string;
 }
