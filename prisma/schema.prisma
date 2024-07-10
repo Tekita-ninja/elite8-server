@@ -15,6 +15,10 @@ enum Role {
   ADMIN
   SUPER
 }
+enum TemplateMessage {
+  WHATSAPP
+  EMAIL
+}
 
 model users {
   id             String   @id @unique @default(uuid())
@@ -81,6 +85,9 @@ model products {
   freeShiping     Boolean  @default(false)
   isPromo         Boolean? @default(false)
   percentDiscount Int?     @default(0)
+  tiktokUrl       String?
+  shopeeUrl       String?
+  tokopediaUrl    String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt()
 
@@ -90,6 +97,17 @@ model products {
   discount discount?
 
   @@index([slug, name])
+}
+
+model MessageTemplate {
+  id        String   @id @unique @default(uuid())
+  type      TemplateMessage
+  message   String   @db.LongText
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+
+  @@map("message_templates")
 }
 
 model varian {
@@ -120,16 +138,18 @@ model subvarian {
 }
 
 model utils {
-  id           String   @id @unique @default(uuid())
-  appName      String?
-  logoSmall    String?
-  logoFull     String?
-  videoProfile String?
-  mainEmail    String?
-  mainWhatsApp String?
-  mainPhone    String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt()
+  id                String   @id @unique @default(uuid())
+  appName           String?
+  logoSmall         String?
+  logoFull          String?
+  videoProfile      String?
+  mainEmail         String?
+  mainWhatsApp      String?
+  mainPhone         String?
+  midtransPublicKey String?
+  mainAddress       String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt()
 }
 
 enum Contact {
