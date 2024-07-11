@@ -137,4 +137,13 @@ export class ProductService {
     }
     return data;
   }
+  async findTemplateProductWA() {
+    const data = await this.prisma.messageTemplate.findFirst({
+      where: {
+        type: 'WHATSAPP',
+        status: true,
+      },
+    });
+    return data;
+  }
 }
