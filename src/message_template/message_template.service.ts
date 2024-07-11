@@ -19,12 +19,12 @@ export class MessageTemplateService {
     const { page, rowsPerPage, sortBy, sortType, ...params } = query;
     const take = rowsPerPage ? parseInt(rowsPerPage) : 10;
     const skip = page && page > 0 ? (parseInt(page) - 1) * take : 0;
-    const orderField = sortBy || 'title';
+    const orderField = sortBy || 'type';
     const orderType = sortType || 'desc';
     const where = {
       ...params,
-      title: {
-        contains: params?.title,
+      type: {
+        contains: params?.type,
       },
     };
     const data = await this.prisma.messageTemplate.findMany({
