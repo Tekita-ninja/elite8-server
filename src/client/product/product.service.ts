@@ -6,6 +6,16 @@ export class ProductService {
   constructor(private prisma: PrismaService) {}
   async findAll(query: any) {
     const { page, rowsPerPage, sortBy, sortType, ...params } = query;
+    let ctg;
+    if (params.category) {
+      ctg = await this.prisma.categories.findFirst({
+        where: {
+          slug: params.category,
+        },
+      });
+    }
+
+    // return params.category;
     const take = rowsPerPage ? parseInt(rowsPerPage) : 10;
     const skip = page && page > 0 ? (parseInt(page) - 1) * take : 0;
     const orderField = sortBy || 'createdAt';
@@ -16,7 +26,9 @@ export class ProductService {
     const where = {
       ...params,
       isPromo,
+      categoryId: ctg ? ctg?.id : undefined,
       search: undefined,
+      category: undefined,
       OR: [
         {
           name: {
