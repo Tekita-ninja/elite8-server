@@ -10,8 +10,11 @@ import {
 class ProductImageDto {
   @IsNotEmpty()
   @IsString()
-  @IsOptional()
   path: string;
+
+  @IsString()
+  @IsOptional()
+  thumbnail: string;
 }
 export class SubVarianDto {
   @IsNotEmpty()
