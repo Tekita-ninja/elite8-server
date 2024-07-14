@@ -15,6 +15,7 @@ enum Role {
   ADMIN
   SUPER
 }
+
 enum TemplateMessage {
   WHATSAPP
   EMAIL
@@ -52,6 +53,7 @@ model productimages {
   id        String    @id @unique @default(uuid())
   productId String?
   path      String
+  thumbnail  String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt()
   product   products? @relation(fields: [productId], references: [id])
@@ -100,12 +102,12 @@ model products {
 }
 
 model MessageTemplate {
-  id        String   @id @unique @default(uuid())
+  id        String          @id @unique @default(uuid())
   type      TemplateMessage
-  message   String   @db.LongText
-  status    Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
+  message   String          @db.LongText
+  status    Boolean         @default(true)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt()
 
   @@map("message_templates")
 }

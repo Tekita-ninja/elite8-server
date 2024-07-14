@@ -14,8 +14,6 @@ export class ProductService {
         },
       });
     }
-
-    // return params.category;
     const take = rowsPerPage ? parseInt(rowsPerPage) : 10;
     const skip = page && page > 0 ? (parseInt(page) - 1) * take : 0;
     const orderField = sortBy || 'createdAt';
