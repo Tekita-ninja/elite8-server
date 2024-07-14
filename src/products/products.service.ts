@@ -158,6 +158,7 @@ export class ProductsService {
           select: {
             id: true,
             path: true,
+            thumbnail: true,
           },
         },
       },
@@ -199,6 +200,7 @@ export class ProductsService {
           select: {
             id: true,
             path: true,
+            thumbnail: true,
           },
         },
         varians: {
@@ -253,6 +255,7 @@ export class ProductsService {
           select: {
             id: true,
             path: true,
+            thumbnail: true,
           },
         },
         varians: {
