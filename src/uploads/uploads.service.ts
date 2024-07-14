@@ -36,7 +36,6 @@ export class UploadsService {
       throw new BadRequestException('failed upload file');
     }
   }
-
   async uploads(files: Array<Express.Multer.File>) {
     try {
       const commands = files.map((file: Express.Multer.File) => {
