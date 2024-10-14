@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, Req, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { Request } from 'express';
@@ -21,8 +21,12 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get()
+  @Get('all')
   getUsers() {
     return this.usersService.findMany();
+  }
+  @Get()
+  findPaginate(@Query() query: any) {
+    return this.usersService.findPaginate(query);
   }
 }

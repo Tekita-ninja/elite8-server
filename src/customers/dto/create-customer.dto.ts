@@ -1,0 +1,27 @@
+import {
+  IsBoolean,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Length,
+} from 'class-validator';
+
+export class CreateCustomerDto {
+  @IsString()
+  @IsNotEmpty()
+  public name: string;
+
+  @IsNotEmpty()
+  @Length(10, 16, {
+    message: 'Phone has to be at between 10 and 16 chars',
+  })
+  public phone: string;
+
+  @IsBoolean()
+  @IsOptional()
+  public status: boolean;
+
+  @IsOptional()
+  @IsString()
+  public address: string;
+}
