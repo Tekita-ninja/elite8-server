@@ -78,4 +78,16 @@ export class QueuePoolsController {
     });
     return data;
   }
+  @UseGuards(JwtAuthGuard)
+  @Post('play')
+  @HttpCode(200)
+  async play(@Body('queueId') queueId: string) {
+    const data = await this.queuePoolsService.setPlay(queueId);
+    // const prev =
+    // this.queuePoolsService.update(queueId, {
+    //   numOfCall: data.numOfCall + 1,
+    //   status: data.numOfCall >= 4 ? 'REMOVED' : 'WAITING',
+    // });
+    return data;
+  }
 }

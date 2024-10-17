@@ -52,7 +52,7 @@ model Customer {
 }
 
 model QueuePool {
-  id          String     @id @unique @default(uuid())
+  id          Int     @id @unique @default(autoincrement())
   customerId  String
   queueNumber Int
   numOfCall   Int        @default(0)

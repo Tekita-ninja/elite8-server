@@ -37,7 +37,7 @@ export class QueuePoolsService {
 
   findPaginate(query: any) {
     const { page, rowsPerPage, sortBy, sortType, ...params } = query;
-    const orderField = sortBy || 'queueNumber';
+    const orderField = sortBy || 'id';
     const orderType = sortType || 'asc';
     const orderBy = { [orderField]: orderType };
     const where = {
@@ -55,7 +55,7 @@ export class QueuePoolsService {
 
   async findOne(id: string) {
     const result = await this.db.queuePool.findUnique({
-      where: { id },
+      where: { id: +id },
       include: {
         customer: true,
       },
@@ -69,14 +69,14 @@ export class QueuePoolsService {
   async update(id: string, data: UpdateQueuePoolDto) {
     await this.findOne(id);
     return this.db.queuePool.update({
-      where: { id },
+      where: { id: +id },
       data: data,
     });
   }
 
   async remove(id: string) {
     await this.findOne(id);
-    return this.db.queuePool.delete({ where: { id } });
+    return this.db.queuePool.delete({ where: { id: +id } });
   }
 
   async getLastNumberWaiting() {
@@ -90,5 +90,38 @@ export class QueuePoolsService {
     });
 
     return d ? d.queueNumber : 0;
+  }
+
+  async setPlay(id: string) {
+    const currentPlayer = await this.findOne(id);
+    const prevPlayer = await this.db.queuePool.findMany({
+      where: {
+        id: {
+          lt: +id,
+        },
+        status: 'WAITING',
+      },
+    });
+    for (let i = 0; i < prevPlayer.length; i++) {
+      const player = prevPlayer[i];
+      await this.db.queuePool.update({
+        data: {
+          numOfCall: player.numOfCall + 1,
+          status: player.numOfCall > 4 ? 'REMOVED' : 'WAITING',
+        },
+        where: {
+          id: player.id,
+        },
+      });
+    }
+    const completePlayer = await this.db.queuePool.update({
+      data: {
+        status: 'COMPLETE',
+      },
+      where: {
+        id: currentPlayer.id,
+      },
+    });
+    return completePlayer;
   }
 }
