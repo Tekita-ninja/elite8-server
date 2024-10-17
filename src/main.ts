@@ -8,12 +8,12 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.enableCors({
-    origin: ['http://localhost:3000'],
+    origin: "*",
   });
   app.useStaticAssets(join(process.cwd(), 'uploads'), {
     prefix: '/uploads/',
   });
   app.use(cookieParser());
-  await app.listen(9000);
+  await app.listen(process.env.PORT);
 }
 bootstrap();
