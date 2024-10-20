@@ -1,7 +1,13 @@
 import { PoolStatus } from '@prisma/client';
 import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 export class CreateQueuePoolDto {
+  @IsOptional()
+  public phone: string;
+  @IsOptional()
+  public name: string;
+
   @IsString()
+  @IsOptional()
   public customerId: string;
 
   @IsNumber()
@@ -13,6 +19,7 @@ export class CreateQueuePoolDto {
   public numOfCall?: number;
 
   @IsString()
+  @IsOptional()
   @IsEnum(PoolStatus, {
     message:
       'status must be one of these values: ' +

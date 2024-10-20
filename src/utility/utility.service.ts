@@ -46,9 +46,9 @@ export class UtilityService {
         status: 'WAITING',
       },
     });
-    const playing = await this.db.queuePool.count({
+    const complete = await this.db.queuePool.count({
       where: {
-        status: 'PLAYING',
+        status: 'COMPLETE',
       },
     });
     const removed = await this.db.queuePool.count({
@@ -64,10 +64,12 @@ export class UtilityService {
           {
             label: 'Customers',
             count: customer,
+            path: 'customers',
           },
           {
             label: 'Users',
             count: user,
+            path: 'users',
           },
         ],
       },
@@ -77,14 +79,17 @@ export class UtilityService {
           {
             label: 'Waiting',
             count: waiting,
-          },
-          {
-            label: 'Playing',
-            count: playing,
+            path: 'waitlist?page=1&rowsPerPage=10&status=WAITING',
           },
           {
             label: 'Removed',
             count: removed,
+            path: 'removed?page=1&rowsPerPage=10&status=REMOVED',
+          },
+          {
+            label: 'Done',
+            count: complete,
+            path: 'complete?page=1&rowsPerPage=10&status=COMPLETE',
           },
         ],
       },

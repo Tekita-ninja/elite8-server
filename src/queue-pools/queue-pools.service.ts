@@ -7,9 +7,41 @@ import { createPaginator } from 'prisma-pagination';
 @Injectable()
 export class QueuePoolsService {
   constructor(private readonly db: DbService) {}
-  create(createQueuePoolDto: CreateQueuePoolDto) {
+  async create(createQueuePoolDto: CreateQueuePoolDto) {
+    let customerId;
+    const customer = await this.db.customer.findFirst({
+      where: {
+        phone: createQueuePoolDto.phone,
+      },
+    });
+    if (customer) {
+      customerId = customer.id;
+      await this.db.customer.update({
+        where: {
+          id: customer.id,
+        },
+        data: {
+          name: createQueuePoolDto.name,
+        },
+      });
+    } else {
+      const newCustomer = await this.db.customer.create({
+        data: {
+          name: createQueuePoolDto.name,
+          phone: createQueuePoolDto.phone,
+          status: true,
+        },
+      });
+      customerId = newCustomer.id;
+    }
+
     return this.db.queuePool.create({
-      data: createQueuePoolDto,
+      data: {
+        customerId: customerId,
+        queueNumber: createQueuePoolDto.queueNumber || 0,
+        numOfCall: createQueuePoolDto.numOfCall || 0,
+        status: 'WAITING',
+      },
     });
   }
 
@@ -107,7 +139,7 @@ export class QueuePoolsService {
       await this.db.queuePool.update({
         data: {
           numOfCall: player.numOfCall + 1,
-          status: player.numOfCall > 4 ? 'REMOVED' : 'WAITING',
+          status: player.numOfCall >= 4 ? 'REMOVED' : 'WAITING',
         },
         where: {
           id: player.id,
