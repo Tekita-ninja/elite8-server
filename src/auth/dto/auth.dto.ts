@@ -1,11 +1,13 @@
 import {
   IsBoolean,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
   Length,
 } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
+import { Role } from '@prisma/client';
 
 export class CreateUserDto {
   @IsString()
@@ -16,6 +18,14 @@ export class CreateUserDto {
   @IsBoolean()
   @IsOptional()
   public status: boolean;
+
+  @IsString()
+  @IsOptional()
+  @IsEnum(Role, {
+    message:
+      'status must be one of these values: ' + Object.values(Role).join(', '),
+  })
+  public role: Role;
 
   @IsNotEmpty()
   @IsString()

@@ -40,7 +40,7 @@ export class UsersService {
   }
 
   async update(id: string, dto: UpdateUserDto) {
-    const { password, username, name, status } = dto;
+    const { password, username, name, status, role } = dto;
     const user = await this.db.user.findUnique({
       where: { id },
     });
@@ -57,6 +57,7 @@ export class UsersService {
         name,
         hashedPassword,
         status,
+        role,
       },
       select: {
         id: true,
