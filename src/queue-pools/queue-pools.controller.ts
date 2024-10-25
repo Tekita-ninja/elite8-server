@@ -90,4 +90,11 @@ export class QueuePoolsController {
     // });
     return data;
   }
+  @UseGuards(JwtAuthGuard)
+  @Post('remove-multiple')
+  @HttpCode(200)
+  async removeMultiple(@Body('queueIds') queueIds: number[]) {
+    const data = await this.queuePoolsService.removeMultiple(queueIds);
+    return data;
+  }
 }

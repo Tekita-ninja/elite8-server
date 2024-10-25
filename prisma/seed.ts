@@ -20,7 +20,7 @@ async function main() {
   });
   const utility = await prisma.utility.create({
     data: {
-      appName: '8BallJos',
+      appName: 'Elite Eight',
       logoSmall: 'default-logo-small.png',
       logoFull: 'default-logo-full.png',
     },
