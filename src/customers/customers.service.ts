@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { DbService } from 'src/db/db.service';
@@ -7,7 +11,20 @@ import { createPaginator } from 'prisma-pagination';
 @Injectable()
 export class CustomersService {
   constructor(private readonly db: DbService) {}
-  create(createCustomerDto: CreateCustomerDto) {
+  deleteMany(ids: string[]) {
+    return this.db.customer.deleteMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+  }
+  async create(createCustomerDto: CreateCustomerDto) {
+    const customer = await this.findOneByPhone(createCustomerDto.phone);
+    if (customer) {
+      throw new BadRequestException('phone number has been registered!');
+    }
     return this.db.customer.create({ data: createCustomerDto });
   }
 
@@ -42,7 +59,7 @@ export class CustomersService {
     }
     return result;
   }
-  findOneByPhone(phone: string) {
+  async findOneByPhone(phone: string) {
     return this.db.customer.findUnique({
       where: { phone },
     });

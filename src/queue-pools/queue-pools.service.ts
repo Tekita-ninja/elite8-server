@@ -1,48 +1,62 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { createPaginator } from 'prisma-pagination';
+import { DbService } from 'src/db/db.service';
 import { CreateQueuePoolDto } from './dto/create-queue-pool.dto';
 import { UpdateQueuePoolDto } from './dto/update-queue-pool.dto';
-import { DbService } from 'src/db/db.service';
-import { createPaginator } from 'prisma-pagination';
 
 @Injectable()
 export class QueuePoolsService {
   constructor(private readonly db: DbService) {}
   async create(createQueuePoolDto: CreateQueuePoolDto) {
-    let customerId;
-    const customer = await this.db.customer.findFirst({
+    const phoneNumberFix = createQueuePoolDto.phoneNumber.split('-').join('');
+    const wl = await this.db.queuePool.findFirst({
       where: {
-        phone: createQueuePoolDto.phone,
-      },
-    });
-    if (customer) {
-      customerId = customer.id;
-      await this.db.customer.update({
-        where: {
-          id: customer.id,
-        },
-        data: {
-          name: createQueuePoolDto.name,
-        },
-      });
-    } else {
-      const newCustomer = await this.db.customer.create({
-        data: {
-          name: createQueuePoolDto.name,
-          phone: createQueuePoolDto.phone,
-          status: true,
-        },
-      });
-      customerId = newCustomer.id;
-    }
-
-    return this.db.queuePool.create({
-      data: {
-        customerId: customerId,
-        queueNumber: createQueuePoolDto.queueNumber || 0,
-        numOfCall: createQueuePoolDto.numOfCall || 0,
+        phoneNumber: phoneNumberFix,
         status: 'WAITING',
       },
     });
+
+    if (wl) {
+      throw new BadRequestException('Customer is exist ini waitlist!');
+    } else {
+      const customer = await this.db.customer.findFirst({
+        where: {
+          phone: phoneNumberFix,
+        },
+      });
+
+      if (customer) {
+        await this.db.customer.update({
+          where: {
+            phone: customer.phone,
+          },
+          data: {
+            name: createQueuePoolDto.name,
+          },
+        });
+      } else {
+        await this.db.customer.create({
+          data: {
+            name: createQueuePoolDto.name,
+            phone: phoneNumberFix,
+            status: true,
+          },
+        });
+      }
+      return this.db.queuePool.create({
+        data: {
+          name: createQueuePoolDto.name,
+          phoneNumber: phoneNumberFix,
+          queueNumber: createQueuePoolDto.queueNumber || 0,
+          numOfCall: createQueuePoolDto.numOfCall || 0,
+          status: 'WAITING',
+        },
+      });
+    }
   }
 
   findAll(query?: any) {
@@ -51,18 +65,12 @@ export class QueuePoolsService {
     };
     return this.db.queuePool.findMany({
       where,
-      include: {
-        customer: true,
-      },
     });
   }
   findList() {
     return this.db.queuePool.findMany({
       where: {
         status: 'WAITING',
-      },
-      include: {
-        customer: true,
       },
     });
   }
@@ -79,18 +87,12 @@ export class QueuePoolsService {
     return paginate(this.db.queuePool, {
       orderBy,
       where,
-      include: {
-        customer: true,
-      },
     });
   }
 
   async findOne(id: string) {
     const result = await this.db.queuePool.findUnique({
       where: { id: +id },
-      include: {
-        customer: true,
-      },
     });
     if (!result) {
       throw new NotFoundException();
@@ -139,7 +141,7 @@ export class QueuePoolsService {
       await this.db.queuePool.update({
         data: {
           numOfCall: player.numOfCall + 1,
-          status: player.numOfCall >= 4 ? 'REMOVED' : 'WAITING',
+          // status: player.numOfCall >= 4 ? 'REMOVED' : 'WAITING',
         },
         where: {
           id: player.id,
@@ -155,5 +157,19 @@ export class QueuePoolsService {
       },
     });
     return completePlayer;
+  }
+
+  async removeMultiple(queueIds: number[]) {
+    return this.db.queuePool.updateMany({
+      data: {
+        status: 'REMOVED',
+      },
+      where: {
+        id: {
+          in: queueIds,
+        },
+        status: 'WAITING',
+      },
+    });
   }
 }

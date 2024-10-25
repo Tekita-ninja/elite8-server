@@ -6,9 +6,13 @@ export class CreateQueuePoolDto {
   @IsOptional()
   public name: string;
 
+  // @IsString()
+  // @IsOptional()
+  // public customerId: string;
+
   @IsString()
   @IsOptional()
-  public customerId: string;
+  public phoneNumber: string;
 
   @IsNumber()
   @IsOptional()
