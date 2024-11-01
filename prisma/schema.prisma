@@ -37,20 +37,20 @@ model User {
 }
 
 model Customer {
-  id                 String            @id @unique @default(uuid())
-  name               String
-  phone              String            @unique
-  address            String?
-  status             Boolean           @default(true)
-  createdAt          DateTime          @default(now())
-  updatedAt          DateTime          @updatedAt()
+  id        String   @id @unique @default(uuid())
+  name      String
+  phone     String   @unique
+  address   String?
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
 
   @@map("customers")
 }
 
 model QueuePool {
   id          Int        @id @unique @default(autoincrement())
-  phoneNumber String     
+  phoneNumber String
   name        String
   queueNumber Int
   numOfCall   Int        @default(0)
@@ -75,4 +75,14 @@ model Utility {
   updatedAt    DateTime @updatedAt()
 
   @@map("utilities")
+}
+
+model Banner {
+  id        String   @id @unique @default(uuid())
+  filename  String
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+
+  @@map("banners")
 }
