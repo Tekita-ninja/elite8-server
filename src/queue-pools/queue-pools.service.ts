@@ -141,7 +141,6 @@ export class QueuePoolsService {
       await this.db.queuePool.update({
         data: {
           numOfCall: player.numOfCall + 1,
-          // status: player.numOfCall >= 4 ? 'REMOVED' : 'WAITING',
         },
         where: {
           id: player.id,

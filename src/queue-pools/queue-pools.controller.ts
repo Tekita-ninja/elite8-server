@@ -72,10 +72,6 @@ export class QueuePoolsController {
   @HttpCode(200)
   async call(@Body('queueId') queueId: string) {
     const data = await this.queuePoolsService.findOne(queueId);
-    this.queuePoolsService.update(queueId, {
-      numOfCall: data.numOfCall + 1,
-      status: data.numOfCall >= 4 ? 'REMOVED' : 'WAITING',
-    });
     return data;
   }
   @UseGuards(JwtAuthGuard)
@@ -83,11 +79,6 @@ export class QueuePoolsController {
   @HttpCode(200)
   async play(@Body('queueId') queueId: string) {
     const data = await this.queuePoolsService.setPlay(queueId);
-    // const prev =
-    // this.queuePoolsService.update(queueId, {
-    //   numOfCall: data.numOfCall + 1,
-    //   status: data.numOfCall >= 4 ? 'REMOVED' : 'WAITING',
-    // });
     return data;
   }
   @UseGuards(JwtAuthGuard)
