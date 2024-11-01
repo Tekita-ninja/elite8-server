@@ -36,7 +36,12 @@ export class BannersService {
   }
 
   findAll() {
-    return `This action returns all banners`;
+    return this.db.banner.findMany({
+      select: {
+        id: true,
+        filename: true,
+      },
+    });
   }
 
   async findOne(id: string) {
