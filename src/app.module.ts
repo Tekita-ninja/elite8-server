@@ -6,6 +6,7 @@ import { DbModule } from './db/db.module';
 import { CustomersModule } from './customers/customers.module';
 import { QueuePoolsModule } from './queue-pools/queue-pools.module';
 import { UtilityModule } from './utility/utility.module';
+import { BannersModule } from './banners/banners.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UtilityModule } from './utility/utility.module';
     CustomersModule,
     QueuePoolsModule,
     UtilityModule,
+    BannersModule,
   ],
   providers: [DbModule],
 })
