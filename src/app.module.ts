@@ -7,6 +7,7 @@ import { CustomersModule } from './customers/customers.module';
 import { QueuePoolsModule } from './queue-pools/queue-pools.module';
 import { UtilityModule } from './utility/utility.module';
 import { BannersModule } from './banners/banners.module';
+import { VisitHistoryModule } from './visit-history/visit-history.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { BannersModule } from './banners/banners.module';
     QueuePoolsModule,
     UtilityModule,
     BannersModule,
+    VisitHistoryModule,
   ],
   providers: [DbModule],
 })

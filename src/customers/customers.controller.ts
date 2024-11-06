@@ -12,7 +12,10 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import { CustomersService } from './customers.service';
-import { CreateCustomerDto } from './dto/create-customer.dto';
+import {
+  ClaimVisitBenefitDto,
+  CreateCustomerDto,
+} from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import * as ExcelJS from 'exceljs';
@@ -22,7 +25,10 @@ import { Response } from 'express';
 @UseGuards(JwtAuthGuard)
 export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
-
+  @Post('claim-visit-benefit')
+  claimVisitBenefit(@Body() dto: ClaimVisitBenefitDto) {
+    return this.customersService.claimVisitBenefit(dto);
+  }
   @Post('delete')
   @HttpCode(200)
   deleteMany(@Body('ids') ids: string[]) {
