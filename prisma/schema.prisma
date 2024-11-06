@@ -37,13 +37,14 @@ model User {
 }
 
 model Customer {
-  id        String   @id @unique @default(uuid())
-  name      String
-  phone     String   @unique
-  address   String?
-  status    Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
+  id             String                 @id @unique @default(uuid())
+  name           String
+  phone          String                 @unique
+  address        String?
+  visitHistories CustomerVisitHistory[]
+  status         Boolean                @default(true)
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt()
 
   @@map("customers")
 }
@@ -85,4 +86,16 @@ model Banner {
   updatedAt DateTime @updatedAt()
 
   @@map("banners")
+}
+
+model CustomerVisitHistory {
+  id         String   @id @unique @default(uuid())
+  customerId String
+  date       DateTime @default(now())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt()
+  status     Boolean @default(true)
+  customer   Customer @relation(fields: [customerId], references: [id],onDelete: Cascade)
+
+  @@map("customer_visit_histories")
 }

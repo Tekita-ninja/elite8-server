@@ -3,7 +3,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateCustomerDto } from './dto/create-customer.dto';
+import {
+  ClaimVisitBenefitDto,
+  CreateCustomerDto,
+} from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { DbService } from 'src/db/db.service';
 import { createPaginator } from 'prisma-pagination';
@@ -47,6 +50,17 @@ export class CustomersService {
     return paginate(this.db.customer, {
       orderBy,
       where,
+      select: {
+        id: true,
+        name: true,
+        phone: true,
+        status: true,
+        _count: {
+          select: {
+            visitHistories: { where: { status: true } },
+          },
+        },
+      },
     });
   }
 
@@ -76,5 +90,24 @@ export class CustomersService {
   async remove(id: string) {
     await this.findOne(id);
     return this.db.customer.delete({ where: { id } });
+  }
+  async claimVisitBenefit(dto: ClaimVisitBenefitDto) {
+    const data = await this.db.customerVisitHistory.findMany({
+      where: {
+        customerId: dto.customerId,
+        status: true,
+      },
+      take: dto.count,
+    });
+    return await this.db.$transaction(
+      data.map((item) =>
+        this.db.customerVisitHistory.update({
+          where: { id: item.id },
+          data: {
+            status: false,
+          },
+        }),
+      ),
+    );
   }
 }

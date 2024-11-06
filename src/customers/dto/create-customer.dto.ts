@@ -1,6 +1,7 @@
 import {
   IsBoolean,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   Length,
@@ -24,4 +25,13 @@ export class CreateCustomerDto {
   @IsOptional()
   @IsString()
   public address: string;
+}
+export class ClaimVisitBenefitDto {
+  @IsString()
+  @IsNotEmpty()
+  public customerId: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  public count: number;
 }

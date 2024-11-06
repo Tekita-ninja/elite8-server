@@ -128,6 +128,11 @@ export class QueuePoolsService {
 
   async setPlay(id: string) {
     const currentPlayer = await this.findOne(id);
+    const customer = await this.db.customer.findFirst({
+      where: {
+        phone: currentPlayer.phoneNumber,
+      },
+    });
     const prevPlayer = await this.db.queuePool.findMany({
       where: {
         id: {
@@ -153,6 +158,11 @@ export class QueuePoolsService {
       },
       where: {
         id: currentPlayer.id,
+      },
+    });
+    await this.db.customerVisitHistory.create({
+      data: {
+        customerId: customer.id,
       },
     });
     return completePlayer;
