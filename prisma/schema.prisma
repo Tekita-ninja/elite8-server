@@ -59,7 +59,7 @@ model QueuePool {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt()
 
-  @@unique([phoneNumber, status])
+  // @@unique([phoneNumber, status])
   @@map("queue_pools")
 }
 
