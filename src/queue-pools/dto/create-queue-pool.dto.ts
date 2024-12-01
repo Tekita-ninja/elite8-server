@@ -6,10 +6,6 @@ export class CreateQueuePoolDto {
   @IsOptional()
   public name: string;
 
-  // @IsString()
-  // @IsOptional()
-  // public customerId: string;
-
   @IsString()
   @IsOptional()
   public phoneNumber: string;
@@ -22,6 +18,14 @@ export class CreateQueuePoolDto {
   @IsOptional()
   public numOfCall?: number;
 
+  @IsNumber()
+  @IsOptional()
+  public numOfPax?: number;
+
+  @IsNumber()
+  @IsOptional()
+  public tableNumber?: string;
+
   @IsString()
   @IsOptional()
   @IsEnum(PoolStatus, {
@@ -30,4 +34,11 @@ export class CreateQueuePoolDto {
       Object.values(PoolStatus).join(', '),
   })
   public status: PoolStatus;
+}
+
+export class PlayQueuePoolDto {
+  @IsNumber()
+  public queueId: number;
+  @IsOptional()
+  public tableNumber: string;
 }

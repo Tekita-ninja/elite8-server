@@ -5,7 +5,10 @@ import {
 } from '@nestjs/common';
 import { createPaginator } from 'prisma-pagination';
 import { DbService } from 'src/db/db.service';
-import { CreateQueuePoolDto } from './dto/create-queue-pool.dto';
+import {
+  CreateQueuePoolDto,
+  PlayQueuePoolDto,
+} from './dto/create-queue-pool.dto';
 import { UpdateQueuePoolDto } from './dto/update-queue-pool.dto';
 
 @Injectable()
@@ -53,6 +56,8 @@ export class QueuePoolsService {
           phoneNumber: phoneNumberFix,
           queueNumber: createQueuePoolDto.queueNumber || 0,
           numOfCall: createQueuePoolDto.numOfCall || 0,
+          numOfPax: createQueuePoolDto.numOfPax || 0,
+          tableNumber: createQueuePoolDto.tableNumber || '',
           status: 'WAITING',
         },
       });
@@ -126,8 +131,8 @@ export class QueuePoolsService {
     return d ? d.queueNumber : 0;
   }
 
-  async setPlay(id: string) {
-    const currentPlayer = await this.findOne(id);
+  async setPlay(dto: PlayQueuePoolDto) {
+    const currentPlayer = await this.findOne(dto.queueId.toString());
     const customer = await this.db.customer.findFirst({
       where: {
         phone: currentPlayer.phoneNumber,
@@ -136,7 +141,7 @@ export class QueuePoolsService {
     const prevPlayer = await this.db.queuePool.findMany({
       where: {
         id: {
-          lt: +id,
+          lt: dto.queueId,
         },
         status: 'WAITING',
       },
@@ -155,6 +160,7 @@ export class QueuePoolsService {
     const completePlayer = await this.db.queuePool.update({
       data: {
         status: 'COMPLETE',
+        tableNumber: dto.tableNumber,
       },
       where: {
         id: currentPlayer.id,

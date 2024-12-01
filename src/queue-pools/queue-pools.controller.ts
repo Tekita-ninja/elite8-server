@@ -11,7 +11,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { QueuePoolsService } from './queue-pools.service';
-import { CreateQueuePoolDto } from './dto/create-queue-pool.dto';
+import {
+  CreateQueuePoolDto,
+  PlayQueuePoolDto,
+} from './dto/create-queue-pool.dto';
 import { UpdateQueuePoolDto } from './dto/update-queue-pool.dto';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 
@@ -77,8 +80,8 @@ export class QueuePoolsController {
   @UseGuards(JwtAuthGuard)
   @Post('play')
   @HttpCode(200)
-  async play(@Body('queueId') queueId: string) {
-    const data = await this.queuePoolsService.setPlay(queueId);
+  async play(@Body() dto: PlayQueuePoolDto) {
+    const data = await this.queuePoolsService.setPlay(dto);
     return data;
   }
   @UseGuards(JwtAuthGuard)
