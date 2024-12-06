@@ -1,8 +1,10 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
+import { Cron } from '@nestjs/schedule';
 import { createPaginator } from 'prisma-pagination';
 import { DbService } from 'src/db/db.service';
 import {
@@ -13,6 +15,7 @@ import { UpdateQueuePoolDto } from './dto/update-queue-pool.dto';
 
 @Injectable()
 export class QueuePoolsService {
+  private readonly logger = new Logger(QueuePoolsService.name);
   constructor(private readonly db: DbService) {}
   async create(createQueuePoolDto: CreateQueuePoolDto) {
     const phoneNumberFix = createQueuePoolDto.phoneNumber.split('-').join('');
@@ -186,5 +189,17 @@ export class QueuePoolsService {
         status: 'WAITING',
       },
     });
+  }
+  removeAllWaitlist() {
+    return this.db.queuePool.deleteMany({
+      where: {
+        status: 'WAITING',
+      },
+    });
+  }
+  @Cron('0 2 * * *')
+  async handleCron() {
+    const x = await this.removeAllWaitlist();
+    this.logger.debug(x);
   }
 }
