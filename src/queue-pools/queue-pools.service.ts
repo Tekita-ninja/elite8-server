@@ -197,7 +197,7 @@ export class QueuePoolsService {
       },
     });
   }
-  @Cron('0 2 * * *')
+  @Cron('0 7 * * *')
   async handleCron() {
     const x = await this.removeAllWaitlist();
     this.logger.debug(x);
