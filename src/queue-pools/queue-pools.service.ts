@@ -149,6 +149,7 @@ export class QueuePoolsService {
         status: 'WAITING',
       },
     });
+
     for (let i = 0; i < prevPlayer.length; i++) {
       const player = prevPlayer[i];
       await this.db.queuePool.update({
@@ -167,6 +168,7 @@ export class QueuePoolsService {
       },
       where: {
         id: currentPlayer.id,
+        status: 'WAITING',
       },
     });
     await this.db.customerVisitHistory.create({

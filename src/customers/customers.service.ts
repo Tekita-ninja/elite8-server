@@ -55,6 +55,7 @@ export class CustomersService {
         name: true,
         phone: true,
         status: true,
+        visitHistories: true,
         _count: {
           select: {
             visitHistories: { where: { status: true } },
@@ -67,6 +68,19 @@ export class CustomersService {
   async findOne(id: string) {
     const result = await this.db.customer.findUnique({
       where: { id },
+      select: {
+        id: true,
+        name: true,
+        phone: true,
+        status: true,
+        createdAt: true,
+        updatedAt: true,
+        _count: {
+          select: {
+            visitHistories: { where: { status: true } },
+          },
+        },
+      },
     });
     if (!result) {
       throw new NotFoundException();
@@ -76,6 +90,19 @@ export class CustomersService {
   async findOneByPhone(phone: string) {
     return this.db.customer.findUnique({
       where: { phone },
+      select: {
+        id: true,
+        name: true,
+        phone: true,
+        status: true,
+        createdAt: true,
+        updatedAt: true,
+        _count: {
+          select: {
+            visitHistories: { where: { status: true } },
+          },
+        },
+      },
     });
   }
 
