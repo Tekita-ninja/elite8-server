@@ -84,6 +84,15 @@ export class QueuePoolsController {
     const data = await this.queuePoolsService.setPlay(dto);
     return data;
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('roleback')
+  @HttpCode(200)
+  async roleback(@Body() dto: PlayQueuePoolDto) {
+    const data = await this.queuePoolsService.roleback(dto);
+    return data;
+  }
+
   @UseGuards(JwtAuthGuard)
   @Post('remove-multiple')
   @HttpCode(200)

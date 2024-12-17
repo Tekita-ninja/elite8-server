@@ -178,6 +178,49 @@ export class QueuePoolsService {
     });
     return completePlayer;
   }
+  async roleback(dto: PlayQueuePoolDto) {
+    const currentPlayer = await this.findOne(dto.queueId.toString());
+    // const customer = await this.db.customer.findFirst({
+    //   where: {
+    //     phone: currentPlayer.phoneNumber,
+    //   },
+    // });
+    const prevPlayer = await this.db.queuePool.findMany({
+      where: {
+        id: {
+          lt: dto.queueId,
+        },
+        status: 'WAITING',
+      },
+    });
+
+    for (let i = 0; i < prevPlayer.length; i++) {
+      const player = prevPlayer[i];
+      await this.db.queuePool.update({
+        data: {
+          numOfCall: player.numOfCall - 1,
+        },
+        where: {
+          id: player.id,
+        },
+      });
+    }
+    const completePlayer = await this.db.queuePool.update({
+      data: {
+        status: 'WAITING',
+        tableNumber: dto.tableNumber,
+      },
+      where: {
+        id: currentPlayer.id,
+      },
+    });
+    // await this.db.customerVisitHistory.create({
+    //   data: {
+    //     customerId: customer.id,
+    //   },
+    // });
+    return completePlayer;
+  }
 
   async removeMultiple(queueIds: number[]) {
     return this.db.queuePool.updateMany({
