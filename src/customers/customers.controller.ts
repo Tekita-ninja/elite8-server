@@ -1,30 +1,41 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  Query,
-  UseGuards,
-  Res,
+  Get,
   HttpCode,
+  Param,
+  Patch,
+  Post,
+  Query,
+  Res,
+  UseGuards,
 } from '@nestjs/common';
+import * as ExcelJS from 'exceljs';
+import { Response } from 'express';
+import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { CustomersService } from './customers.service';
 import {
   ClaimVisitBenefitDto,
   CreateCustomerDto,
 } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
-import { JwtAuthGuard } from 'src/auth/jwt.guard';
-import * as ExcelJS from 'exceljs';
-import { Response } from 'express';
+import { VisitStatsDto } from './dto/stats-customer.dto';
 
 @Controller('customers')
 @UseGuards(JwtAuthGuard)
 export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
+  @Get('stats')
+  async visitStats(@Query() query: VisitStatsDto) {
+    const x = await this.customersService.visitStats(query);
+    return x;
+  }
+  @Get('top-customers')
+  findTop(@Query('count') count: number) {
+    return this.customersService.findTop(count);
+  }
+
   @Post('claim-visit-benefit')
   claimVisitBenefit(@Body() dto: ClaimVisitBenefitDto) {
     return this.customersService.claimVisitBenefit(dto);
