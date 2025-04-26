@@ -53,11 +53,12 @@ export class CustomersController {
   @Get('export')
   async export(@Res() res: Response) {
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('TestExportXLS');
+    const worksheet = workbook.addWorksheet('Customers');
 
     worksheet.columns = [
-      { header: 'Name', key: 'name' },
-      { header: 'Phone', key: 'phone' },
+      { header: 'Name', key: 'name', width: 30 },
+      { header: 'Phone', key: 'phone', width: 30 },
+      { header: 'Number Of Visit', key: 'numberOfVisit', width: 30 },
     ];
 
     const customers = await this.customersService.findAll();
@@ -67,8 +68,32 @@ export class CustomersController {
       worksheet.addRow({
         name: item.name,
         phone: item.phone,
+        numberOfVisit: item._count.visitHistories,
       });
     }
+    const headerRow = worksheet.getRow(1);
+    headerRow.height = 20;
+    headerRow.eachCell((cell) => {
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FF000000' },
+      };
+      cell.font = {
+        bold: true,
+        color: { argb: 'FFFFFFFF' },
+      };
+      cell.alignment = { vertical: 'middle', horizontal: 'center' };
+    });
+
+    worksheet.eachRow((row) => {
+      row.eachCell((cell) => {
+        cell.alignment = {
+          horizontal: 'center',
+          vertical: 'middle',
+        };
+      });
+    });
     const buffer = await workbook.xlsx.writeBuffer();
     res.header(
       'Content-Disposition',

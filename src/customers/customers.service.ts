@@ -34,7 +34,20 @@ export class CustomersService {
   }
 
   findAll() {
-    return this.db.customer.findMany();
+    return this.db.customer.findMany({
+      select: {
+        id: true,
+        name: true,
+        phone: true,
+        status: true,
+        visitHistories: true,
+        _count: {
+          select: {
+            visitHistories: { where: { status: true } },
+          },
+        },
+      },
+    });
   }
 
   findPaginate(query: any) {
