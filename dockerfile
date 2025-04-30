@@ -13,12 +13,13 @@
   COPY package*.json ./
   RUN npm install --legacy-peer-deps
 
-  RUN echo "Contents of /app:" && ls -al /app && \
-    echo "Contents of /app/uploads:" && ls -al /app/uploads || echo "uploads missing"
-
   COPY . .
   COPY .env .env
   RUN npx prisma generate
+
+  RUN echo "Contents of /app:" && ls -al /app && \
+    echo "Contents of /app/uploads:" && ls -al /app/uploads || echo "uploads missing"
+
   RUN npm run build
   
   
