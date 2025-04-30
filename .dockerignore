@@ -8,7 +8,6 @@ Dockerfile
 test
 node_modules
 .git
-uploads
 *.md
 *.log
 Dockerfile
