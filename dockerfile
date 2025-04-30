@@ -12,7 +12,6 @@
   
   # Copy only the necessary files
   COPY package*.json ./
-  RUN npm ci --omit=dev
   
   # Copy full source code and environment
   COPY . .
