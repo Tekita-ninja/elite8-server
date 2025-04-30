@@ -15,7 +15,7 @@
   
   COPY .env .env
   RUN npx prisma generate
-  RUN npm run generate
+  RUN npm run build
 
 # ---------- Stage 2: Runtime ----------  
   FROM node:20-slim AS runner
