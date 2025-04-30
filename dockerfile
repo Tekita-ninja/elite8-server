@@ -1,12 +1,10 @@
 # ----------- Stage 1: Builder -----------
-  FROM node:20-alpine AS builder
+  FROM node:20-slim AS builder
 
-  # Install necessary build tools
-  RUN apk add --no-cache \
+  RUN apt-get update && apt-get install -y \
+    build-essential \
     python3 \
-    py3-pip \
-    make \
-    g++
+    && rm -rf /var/lib/apt/lists/*
 
   WORKDIR /app
 
@@ -24,7 +22,7 @@
   
   
   # ----------- Stage 2: Runtime -----------
-  FROM node:20-alpine AS runner
+  FROM node:20-slim AS runner
   
   WORKDIR /app
   
