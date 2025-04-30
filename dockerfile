@@ -3,11 +3,12 @@
 
   # Install necessary build tools
   RUN apk add --no-cache \
-      python3 \
-      make \
-      g++ \
-      openssl \
-      && npm config set python python3
+    python3 \
+    py3-pip \
+    make \
+    g++ \
+    && npm config set python python3
+
   
   WORKDIR /app
   
