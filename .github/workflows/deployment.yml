@@ -1,0 +1,45 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: copy env
+        run: |
+          echo "DATABASE_URL="mysql://${{ DB_USERNAME }}:${{ DB_PASSWORD }}@${{ DB_HOST }}/${{ DB_NAME }}"" > .env
+          echo "PORT=3000" >> .env
+          echo "JWT_SECRET=RahasiaSekali@123" >> .env
+          echo "JWT_REFRESH_SECRET=RahasiaSekali@123JOS" >> .env
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Docker image
+        run: |
+          docker build -t ghcr.io/${{ github.repository }}:${{ github.sha }} .
+
+      - name: Push Docker image to GHCR
+        run: |
+          docker push ghcr.io/${{ github.repository }}:${{ github.sha }}
