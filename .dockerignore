@@ -6,10 +6,3 @@ uploads
 Dockerfile
 .dockerignore
 test
-node_modules
-.git
-*.md
-*.log
-Dockerfile
-.dockerignore
-test
