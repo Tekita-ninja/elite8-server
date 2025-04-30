@@ -1,7 +1,7 @@
-# ----------- Stage 1: Build -----------
+# ----------- Stage 1: Builder -----------
   FROM node:20-alpine AS builder
 
-  # Install system deps for Prisma and node-gyp
+  # Install necessary build tools
   RUN apk add --no-cache \
       python3 \
       make \
@@ -11,18 +11,18 @@
   
   WORKDIR /app
   
-  # Copy package files and install deps
+  # Copy package files and install dependencies
   COPY package*.json ./
-  RUN npm ci --legacy-peer-deps
+  RUN npm install --legacy-peer-deps
   
-  # Copy rest of the source
+  # Copy the rest of the source code
   COPY . .
   
-  # Copy env and generate Prisma client
+  # Generate Prisma client (creates node_modules/.prisma and node_modules/@prisma/client)
   COPY .env .env
   RUN npx prisma generate
   
-  # Build the app (for NestJS or similar)
+  # Build the app (NestJS or TS)
   RUN npm run build
   
   
@@ -31,7 +31,7 @@
   
   WORKDIR /app
   
-  # Copy only the necessary files from builder
+  # Copy only what's needed from builder
   COPY --from=builder /app/node_modules ./node_modules
   COPY --from=builder /app/package.json ./package.json
   COPY --from=builder /app/dist ./dist
@@ -39,5 +39,6 @@
   
   EXPOSE 3000
   
+  # Use direct entry point to avoid relying on npm scripts
   CMD ["node", "dist/main.js"]
   
