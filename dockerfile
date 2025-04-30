@@ -1,5 +1,5 @@
 # ----------- Stage 1: Builder -----------
-  FROM node:20.5.1-slim AS builder
+  FROM node:20-bullseye-slim AS builder
 
   RUN apt-get update && apt-get install -y \
     build-essential \
@@ -23,7 +23,8 @@
   
   
   # ----------- Stage 2: Runtime -----------
-  FROM node:20-slim AS runner
+  FROM node:20-bullseye-slim AS runner
+
   
   WORKDIR /app
   
