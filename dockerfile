@@ -33,5 +33,5 @@
   EXPOSE 3000
   
   # Use direct entry point to avoid relying on npm scripts
-  CMD ["node", "dist/main.js"]
+  CMD ["node", "dist/src/main.js"]
   
