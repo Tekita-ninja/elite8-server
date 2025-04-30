@@ -1,5 +1,5 @@
 # ----------- Stage 1: Builder -----------
-  FROM node:20-slim AS builder
+  FROM node:20.5.1-slim AS builder
 
   RUN apt-get update && apt-get install -y \
     build-essential \
