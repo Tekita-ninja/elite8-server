@@ -6,24 +6,16 @@
     python3 \
     py3-pip \
     make \
-    g++ \
-    && npm config set python python3
+    g++
 
-  
   WORKDIR /app
-  
-  # Copy package files and install dependencies
+
   COPY package*.json ./
   RUN npm install --legacy-peer-deps
-  
-  # Copy the rest of the source code
+
   COPY . .
-  
-  # Generate Prisma client (creates node_modules/.prisma and node_modules/@prisma/client)
   COPY .env .env
   RUN npx prisma generate
-  
-  # Build the app (NestJS or TS)
   RUN npm run build
   
   
