@@ -25,10 +25,10 @@ jobs:
 
       - name: copy env
         run: |
-          echo "DATABASE_URL="mysql://${{ DB_USERNAME }}:${{ DB_PASSWORD }}@${{ DB_HOST }}/${{ DB_NAME }}"" > .env
+          echo "DATABASE_URL=""mysql://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@${{ secrets.DB_HOST }}/${{ secrets.DB_NAME }}"" > .env
           echo "PORT=3000" >> .env
-          echo "JWT_SECRET=${{ JWT_SECRET }}" >> .env
-          echo "JWT_REFRESH_SECRET=${{ JWT_REFRESH_SECRET }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }}" >> .env
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
