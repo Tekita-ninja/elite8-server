@@ -72,3 +72,9 @@ jobs:
             cd ${{ secrets.PROJECT_PATH }}
             docker-compose up -d --no-deps --build elite8-api
             "
+
+      - name: clean up unused/old image
+        run: |
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.TEKITA_SSH_USER }}@${{ secrets.TEKITA_REMOTE_SERVER }} "\
+            docker image prune -f
+            "
