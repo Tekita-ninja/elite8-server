@@ -44,3 +44,31 @@ jobs:
       - name: Push Docker image to GHCR
         run: |
           docker push ghcr.io/${{ github.repository }}:${{ github.sha }}
+
+  deploy:
+    needs: build-image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup SSH
+        shell: bash
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.TEKITA_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.TEKITA_REMOTE_SERVER }} >> ~/.ssh/known_hosts
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.TEKITA_SSH_USER }}@${{ secrets.TEKITA_REMOTE_SERVER }} "echo 'Connection successful!'"
+
+      - name: change image tag
+        run: |
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.TEKITA_SSH_USER }}@${{ secrets.TEKITA_REMOTE_SERVER }} "\
+            cd ${{ secrets.PROJECT_PATH }}
+            sed -i 's|ghcr.io/.*/elite8-server:.*|ghcr.io/${{ github.repository }}:${{ github.sha }}|' docker-compose.yml
+            "
+
+      # - name: restart service after image change
+      #   run: |
+      #     ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.TEKITA_SSH_USER }}@${{ secrets.TEKITA_REMOTE_SERVER }} "\
+      #       cd ${{ secrets.PROJECT_PATH }}
+      #       docker-compose 
+      #       "
