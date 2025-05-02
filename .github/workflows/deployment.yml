@@ -66,9 +66,9 @@ jobs:
             sed -i 's|ghcr.io/.*/elite8-server:.*|ghcr.io/${{ github.repository }}:${{ github.sha }}|' docker-compose.yml
             "
 
-      # - name: restart service after image change
-      #   run: |
-      #     ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.TEKITA_SSH_USER }}@${{ secrets.TEKITA_REMOTE_SERVER }} "\
-      #       cd ${{ secrets.PROJECT_PATH }}
-      #       docker-compose 
-      #       "
+      - name: restart service after image change
+        run: |
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.TEKITA_SSH_USER }}@${{ secrets.TEKITA_REMOTE_SERVER }} "\
+            cd ${{ secrets.PROJECT_PATH }}
+            docker-compose up -d --no-deps --build elite8-api
+            "
